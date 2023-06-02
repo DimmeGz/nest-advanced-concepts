@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { LazyModuleLoader } from '@nestjs/core';
 import { COFFEES_DATA_SOURCE } from './constants/all.constants';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -11,9 +12,21 @@ export interface CoffeesDataSource { // OR alternatively "export type CoffeesDat
 
 @Injectable()
 export class CoffeesService {
-  constructor(@Inject(COFFEES_DATA_SOURCE) dataSource: CoffeesDataSource) {}
+  constructor(
+    @Inject(COFFEES_DATA_SOURCE) dataSource: CoffeesDataSource,
+    private readonly lazyModuleLoader: LazyModuleLoader,
+  ) {}
 
-  create(createCoffeeDto: CreateCoffeeDto) {
+  async create(createCoffeeDto: CreateCoffeeDto) {
+    console.time()
+    // Lazy load RewardsModule
+    const rewardsModuleRef = await this.lazyModuleLoader.load(() =>
+      import('../rewards/rewards.module').then((m) => m.RewardsModule),
+    );
+    const { RewardsService } = await import('../rewards/rewards.service');
+    const rewardsService = rewardsModuleRef.get(RewardsService);
+    rewardsService.grantTo();
+    console.timeEnd()
     return 'This action adds a new coffee';
   }
 

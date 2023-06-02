@@ -7,7 +7,7 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 @Injectable({ scope: Scope.REQUEST })
 export class TagsService {
   constructor(@Inject(REQUEST) request: unknown) {
-    console.log(request);
+    // console.log(request);
   }
 
   create(createTagDto: CreateTagDto) {

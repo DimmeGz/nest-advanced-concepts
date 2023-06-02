@@ -15,7 +15,7 @@ export class TagsModule implements OnApplicationBootstrap {
     const contextId = ContextIdFactory.create()
     this.moduleRef.registerRequestByContextId({ hello: 'world'}, contextId)
     const tagsServiceProvider = await this.moduleRef.resolve(TagsService, contextId);
-    console.log(tagsServiceProvider);
+    // console.log(tagsServiceProvider);
 
     // const contextId = ContextIdFactory.create()
     // const tagsServices = await Promise.all([

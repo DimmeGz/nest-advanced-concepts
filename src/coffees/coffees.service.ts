@@ -1,9 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { COFFEES_DATA_SOURCE } from './constants/all.constants';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Coffee } from './entities/coffee.entity';
+
+export interface CoffeesDataSource { // OR alternatively "export type CoffeesDataSource = Coffee[]"
+  [index: number]: Coffee;
+}
+
 
 @Injectable()
 export class CoffeesService {
+  constructor(@Inject(COFFEES_DATA_SOURCE) dataSource: CoffeesDataSource) {}
+
   create(createCoffeeDto: CreateCoffeeDto) {
     return 'This action adds a new coffee';
   }
